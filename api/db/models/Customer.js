@@ -1,6 +1,5 @@
 const db = require('../db');
 const { Model, DataTypes } = require('sequelize');
-//const Vehicle = require('./Vehicle');
 const ParseDate = require('../../utils/ParseDate');
 const Vehicle = require('./Vehicle');
 
@@ -34,7 +33,7 @@ Customer.init({
 
     customerType: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false//false is normal client, true anables current account
+        defaultValue: false//false is normal client, true anables vip aacount
     },
     address: {
         type: DataTypes.STRING,
