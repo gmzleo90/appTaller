@@ -1,5 +1,7 @@
 const db = require('../db');
 const { Model, DataTypes } = require('sequelize');
+const { DATE } = require('sequelize');
+const ParseDate = require('../../utils/ParseDate');
 //const Turn = require('./Turn');
 
 
@@ -9,13 +11,15 @@ class Vehicle extends Model { }
 
 Vehicle.init({
     // Model attributes are defined here
-    CustomerId:{
-        type: INTEGER
-    },
+    // customerId:{
+    //     type: INTEGER,
+    //     allowNull: false,
+    // },
 
-    BrandId: {
-        type: INTEGER
-    },
+    // brandId: {
+    //     type: INTEGER,
+    //     allowNull: false,
+    // },
 
     domain: {
         type: STRING,
@@ -25,8 +29,18 @@ Vehicle.init({
         allowNull: false,
     },
 
+    year: {
+        type: STRING,
+        allowNull: false,
+    },
+    createdAt: {
+        type: STRING,
+        defaultValue: ParseDate.getDateTime().date
+    },
+
 }, {
     // model options 
+    timestamps: false,
     sequelize: db,  // connection instance
     modelName: 'Vehicle' // model name
 });

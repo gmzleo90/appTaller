@@ -16,33 +16,17 @@ const Turn = require('./db/models/Turn.js');
 
 //middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());//parser
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({         //cors 
     origin: 'http://localhost:3000'
 }))
 
 
-//route
-
-// //User create
-// app.post('/create/user', (req, res) => {
-//     const userData = req.body;
-//     User.create({ ...userData })
-//         .then((user) => {
-//             console.log('User Created');
-//             res.status(201).json({ ...user.dataValues })
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             res.status(500).json(err.message);
-//         });
-// })
-
 //get all clients
 app.get('/api/clients/general', (req, res) => {
     Customer.findAll({ where: { customerType: false } }).then(result => {
-        res.send(result).status(200)
+        res.status(201).send(result);
     }).catch();
 })
 
@@ -61,7 +45,7 @@ app.post('/api/clients-create', (req, res) => {
             console.log('created!');
             Customer.findAll({ where: { dni: req.body.dni } })
                 .then(result => {
-                    res.send(result).statusCode(201);
+                    res.status(201).send(result);
                 })
         })
         .catch((err) => {
@@ -70,11 +54,101 @@ app.post('/api/clients-create', (req, res) => {
         })
 })
 
-app.delete('/api/clients/delete/:id', (req, res) => {
+app.post('/api/vehicles-create', (req, res) => {
+    Vehicle.create({ ...req.body })
+        .then(() => {
+            console.log('created!');
+            Vehicle.findAll({ where: { domain: req.body.domain } })
+                .then(result => {
+                    res.status(201).send(result);
+                })
+        })
+        .catch((err) => {
+            //res.sendStatus(409)   
+            console.log(err);
+        })
+});
+
+app.get('/api/vehicles', (req, res) => {
+
+
+    Vehicle.findAll()
+        .then(result => {
+            res.status(201).send(result);
+        })
+
+
+});
+
+app.delete('/api/clients-delete/:id', (req, res) => {
+
+});
+
+app.post('/api/vehicles/brands-create', (req, res) => {
+    console.log(req.body);
+    Brand.create({ ...req.body })
+        .then(() => {
+            console.log('created!');
+            Brand.findAll({ where: { brandName: req.body.brandName } })
+                .then(result => {
+                    res.sendStatus(201).send(result);
+                });
+        })
+        .catch((err) => {
+            //res.sendStatus(409)   
+            console.log(err);
+        });
 
 })
 
+app.get('/api/vehicles/brands', async (req, res) => {
+    const result = await Brand.findAll();
+    res.send(result)
+});
 
+app.delete('/api/vehicles/brands-delete', async (req, res) => {
+    try {
+        const searchResult = await
+            Brand.findOne({
+                where: {
+                    id: req.query.id
+                }
+            });
+        if (searchResult) {
+            await Brand.destroy({ where: { id: req.query.id } });
+
+            res.sendStatus(202);
+
+        } else {
+            res.send('no existe Id')
+        }
+
+
+    } catch (err) {
+        if (err) res.send(err.message)
+        console.log('ERROR: ', err.message)
+    }
+});
+
+//get client whit vehicles
+app.get('/api/clients', async (req, res) => {
+    try {
+        const result = await Customer.findOne({ 
+            where: { 
+                id: req.query.id 
+            }, 
+            include: [{ 
+                model: Vehicle, 
+                include: [Brand] 
+            }] 
+        });      
+        res.send(result);
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+});
 
 //[{ model: Vehicle, include: [Brand] }]
 
