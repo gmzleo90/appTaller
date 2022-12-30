@@ -10,7 +10,9 @@ import {
   DialogTitle,
   FormControlLabel,
   Switch,
+  FormControl,
 } from "@mui/material";
+import { useState } from "react";
 
 export default function NewClientForm({ props }) {
   const {
@@ -18,12 +20,20 @@ export default function NewClientForm({ props }) {
     openClientForm,
     setOpenClientForm,
     getClients,
-    customerTypeValue,
-    setCustomerTypeValue,
     setType,
     setAlertMsg,
   } = { ...props };
 
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    dni: "",
+    cuit: "",
+    address: "",
+    location: "",
+    phone: "",
+    customerType: false,
+  });
   const handleClose = (e) => {
     setOpenClientForm(false);
   };
@@ -35,40 +45,25 @@ export default function NewClientForm({ props }) {
   }
 
   function handleSave() {
-    const formBody = {
-      firstName: document.getElementById("firstName").value
-        ? document.getElementById("firstName").value
-        : null,
-      lastName: document.getElementById("lastName").value
-        ? document.getElementById("lastName").value
-        : null,
-      dni: document.getElementById("dni").value
-        ? document.getElementById("dni").value
-        : null,
-      cuit: document.getElementById("cuit").value
-        ? document.getElementById("cuit").value
-        : null,
-      address: document.getElementById("address").value
-        ? document.getElementById("address").value
-        : null,
-      location: document.getElementById("location").value
-        ? document.getElementById("location").value
-        : null,
-      customerType: customerTypeValue,
-    };
-
-    // console.log("data form", document.getElementById('customer-type').checked);
-
+    console.log(form);
+    setForm({ ...form });
     axios
-      .post("http://localhost:3001/api/clients-create", { ...formBody })
+      .post("http://localhost:3001/api/clients-create", { ...form })
       .then((resp) => {
         console.log(resp.data);
         handleClose();
         getClients();
-        OpenToast(
-          "Exito: Cliente Guardado!",
-          "success"
-        );
+        OpenToast("Exito: Cliente Guardado!", "success");
+        setForm({
+          firstName: "",
+          lastName: "",
+          dni: "",
+          cuit: "",
+          address: "",
+          location: "",
+          phone: "",
+          customerType: false,
+        });
       })
       .catch((err) => {
         console.error("ERROR--->", err);
@@ -87,7 +82,7 @@ export default function NewClientForm({ props }) {
           <DialogContentText>
             Complete el formulario, luego presione "Guardar"
           </DialogContentText>
-          <form action="post" id="customer-form">
+          <FormControl className="">
             <TextField
               autoFocus
               margin="dense"
@@ -96,6 +91,7 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.firstName = e.target.value)}
               required
             />
             <TextField
@@ -105,6 +101,7 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.lastName = e.target.value)}
               required
             />
             <TextField
@@ -114,6 +111,7 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.dni = e.target.value)}
               required
             />
             <TextField
@@ -123,6 +121,7 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.phone = e.target.value)}
               required
             />
             <TextField
@@ -132,6 +131,7 @@ export default function NewClientForm({ props }) {
               type="number"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.cuit = e.target.value)}
             />
             <TextField
               margin="dense"
@@ -140,6 +140,7 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.address = e.target.value)}
               required
             />
             <TextField
@@ -149,15 +150,16 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
+              onChange={(e) => (form.location = e.target.value)}
               required
             />
             <FormControlLabel
               id="customer-type"
               control={<Switch />}
               label="Habilitar Cuenta Corriente"
-              onChange={(e) => setCustomerTypeValue(e.target.checked)}
+              onChange={(e) => (form.customerType = e.target.checked)}
             />
-          </form>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>

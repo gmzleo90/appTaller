@@ -30,7 +30,7 @@ export default function Clients() {
   const [clients, setClients] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
   const [openClientForm, setOpenClientForm] = useState(false);
-  const [customerTypeValue, setCustomerTypeValue] = useState(false);
+  //const [customerTypeValue, setCustomerTypeValue] = useState(false);
   const [type, setType] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
@@ -117,7 +117,6 @@ export default function Clients() {
 
   function handleNewClient() {
     setOpenClientForm(true);
-    setCustomerTypeValue(false);
   }
 
   useEffect(() => {
@@ -201,11 +200,9 @@ export default function Clients() {
         <NewClientForm
           props={{
             openClientForm,
-            customerTypeValue,
             ToastAlert,
             getClients,
             setOpenClientForm,
-            setCustomerTypeValue,
             setType,
             setAlertMsg,
           }}

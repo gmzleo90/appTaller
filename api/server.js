@@ -23,8 +23,6 @@ app.use(cors({         //cors
 }))
 
 
-
-
 //route
 
 // //User create
@@ -57,20 +55,22 @@ app.get('/api/clients/checking-accounts', (req, res) => {
 
 
 app.post('/api/clients-create', (req, res) => {
-
+    console.log(req.body);
     Customer.create({ ...req.body })
         .then(() => {
             console.log('created!');
             Customer.findAll({ where: { dni: req.body.dni } })
                 .then(result => {
-                    res.send(result)
-                    res.sendStatus(201)
+                    res.send(result).statusCode(201);
                 })
         })
         .catch((err) => {
+            //res.sendStatus(409)   
+            console.log(err);
+        })
+})
 
-            res.send(err).status(409);
-        });
+app.delete('/api/clients/delete/:id', (req, res) => {
 
 })
 
@@ -83,7 +83,7 @@ app.post('/api/clients-create', (req, res) => {
 
 
 
-//serve
+//server port
 const PORT = 3001;
 
 db.sync(
