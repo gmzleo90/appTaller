@@ -16,7 +16,7 @@ import { useState } from "react";
 
 export default function NewClientForm({ props }) {
   const {
-    ToastAlert,
+    toastAlert,
     openClientForm,
     setOpenClientForm,
     getClients,
@@ -41,7 +41,7 @@ export default function NewClientForm({ props }) {
   function OpenToast(msg, type) {
     setType(type);
     setAlertMsg(msg);
-    ToastAlert();
+    toastAlert();
   }
 
   function handleSave() {

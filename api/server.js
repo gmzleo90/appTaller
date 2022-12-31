@@ -91,7 +91,7 @@ app.post('/api/vehicles/brands-create', (req, res) => {
             console.log('created!');
             Brand.findAll({ where: { brandName: req.body.brandName } })
                 .then(result => {
-                    res.sendStatus(201).send(result);
+                    res.status(201).send(result);
                 });
         })
         .catch((err) => {
@@ -103,7 +103,7 @@ app.post('/api/vehicles/brands-create', (req, res) => {
 
 app.get('/api/vehicles/brands', async (req, res) => {
     const result = await Brand.findAll();
-    res.send(result)
+    res.status(200).send(result)
 });
 
 app.delete('/api/vehicles/brands-delete', async (req, res) => {
