@@ -18,66 +18,63 @@ import { useEffect } from "react";
 
 export default function NewClientForm({ props }) {
   const {
-    ToastAlert,
+    toastAlert,
     openClientForm,
     setOpenClientForm,
     setType,
     setAlertMsg,
   } = { ...props };
 
+  const handleClose = (e) => {
+    setOpenClientForm(false);
+  };
+
   const [form, setForm] = useState({
     domain: "",
     BrandId: "",
     model: "",
     year: "",
+    CustomerId: 2,
   });
 
-  const [brands, setBrands] = useState();
-  const handleClose = (e) => {
-    setOpenClientForm(false);
-  };
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/vehicles/brands")
-    .then(
-      (brandsGet) => {
-        setBrands(brandsGet.data);
-        console.log("Getted Brands ---> ",brandsGet.data)
-      }
-      
-      );
+    axios.get("http://localhost:3001/api/vehicles/brands").then((brandsGet) => {
+      setBrands(brandsGet.data);
+      console.log("Getted Brands ---> ", brandsGet.data);
+    });
   }, []);
 
   function OpenToast(msg, type) {
     setType(type);
     setAlertMsg(msg);
-    ToastAlert();
+    toastAlert();
   }
 
   function handleSave() {
-    // console.log(form);
-    // setForm({ ...form });
-    // axios
-    //   .post("http://localhost:3001/api/vehicles-create", { ...form })
-    //   .then((resp) => {
-    //     console.log(resp.data);
-    //     handleClose();
-    //     OpenToast("Exito: Cliente Guardado!", "success");
-    //     setForm({
-    //       domain: "",
-    //       BrandId: "",
-    //       model: "",
-    //       year: "",
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.error("ERROR--->", err);
-    //     OpenToast(
-    //       "No se puede Guardar: Error de proceso o Datos Ingresados!",
-    //       err.message
-    //     );
-    //   });
-  }
+    setForm({ ...form });
+    axios
+      .post("http://localhost:3001/api/vehicles-create", { ...form })
+      .then((resp) => {
+        console.log(resp.data);
+        handleClose();
+        OpenToast("Exito: Vehiculo creado!", "success");
+        setForm({
+          domain: "",
+          BrandId: "",
+          model: "",
+          year: "",
+        });
+      })
+      .catch((err) => {
+        console.error("ERROR--->", err)
+      OpenToast(
+        "No se puede Guardar: Error de proceso o Datos Ingresados!",
+        err.message
+      )})
+    }
+  
 
   return (
     <>
@@ -87,9 +84,30 @@ export default function NewClientForm({ props }) {
           <DialogContentText>
             Complete el formulario, luego presione "Guardar"
           </DialogContentText>
-          <FormControl className="">
-            <TextField
+          <FormControl fullWidth>
+            <InputLabel id="brand">Marca</InputLabel>
+            <Select
               autoFocus
+              labelId="brand"
+              id="brand-select"
+              value={form.BrandId}
+              label="Marca"
+              onChange={(e) => {
+                form.BrandId = e.target.value;
+                setForm({...form})
+                }
+              }
+            >
+              {brands.map((brand) => (
+                <MenuItem key={brand.id} value={brand.id}>
+                  {brand.brandName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <TextField
               margin="dense"
               id="domain"
               label="Dominio"
@@ -97,19 +115,26 @@ export default function NewClientForm({ props }) {
               placeholder="Ingresar: ABC-123 ó AB-123-CD"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.domain = e.target.value)}
+              onChange={(e) => {
+                  form.domain = e.target.value;
+                  setForm({...form});
+                }
+              }
               required
             />
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={""}
-              label="Modelo"
-              onChange={(e) => (form.BrandId = e.target.value)}
-            >
-              {brands? brands.map((brand)=> <MenuItem key={brand.id} value={brand.id}>{brand.brandName}</MenuItem>):  <MenuItem value={10}>Ten</MenuItem>}
-            </Select>
 
+            <TextField
+              margin="dense"
+              id="model"
+              label="Modelo"
+              type="text"
+              variant="outlined"
+              onChange={(e) => {
+                form.model = e.target.value;
+                setForm({...form});
+              }}
+              required
+            />
             <TextField
               margin="dense"
               id="year"
@@ -117,7 +142,11 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.year = e.target.value)}
+              onChange={(e) => {
+                 form.year = e.target.value
+                 setForm({...form});
+                }
+              }
               required
             />
           </FormControl>
@@ -126,7 +155,6 @@ export default function NewClientForm({ props }) {
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
             type="submit"
-            form="customer-form"
             onClick={(e) => {
               e.preventDefault();
               handleSave();

@@ -198,7 +198,7 @@ export default function Clients() {
             />
           </Box>
         </Grid>
-        <NewVehicleForm
+        <NewClientForm
           props={{
             openClientForm,
             toastAlert,
