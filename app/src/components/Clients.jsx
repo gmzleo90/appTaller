@@ -16,6 +16,7 @@ import {
 import { DeleteOutline } from "@mui/icons-material";
 import axios from "axios";
 import NewClientForm from "./NewClientForm";
+import NewVehicleForm from './NewVehicleForm';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -123,7 +124,7 @@ export default function Clients() {
     getClients();
   }, []);
 
-  function ToastAlert() {
+  function toastAlert() {
     setOpenAlert(true);
   }
 
@@ -200,7 +201,7 @@ export default function Clients() {
         <NewClientForm
           props={{
             openClientForm,
-            ToastAlert,
+            toastAlert,
             getClients,
             setOpenClientForm,
             setType,
