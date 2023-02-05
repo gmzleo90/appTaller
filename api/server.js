@@ -49,7 +49,7 @@ app.post('/api/clients-create', (req, res) => {
                 })
         })
         .catch((err) => {
-            //res.sendStatus(409)   
+            res.status(409).send(err.message);
             console.log(err);
         })
 })
@@ -133,15 +133,15 @@ app.delete('/api/vehicles/brands-delete', async (req, res) => {
 //get client whit vehicles
 app.get('/api/clients-and-vehicles', async (req, res) => {
     try {
-        const result = await Customer.findOne({ 
-            where: { 
-                id: req.query.id 
-            }, 
-            include: [{ 
-                model: Vehicle, 
-                include: [Brand] 
-            }] 
-        });      
+        const result = await Customer.findOne({
+            where: {
+                id: req.query.id
+            },
+            include: [{
+                model: Vehicle,
+                include: [Brand]
+            }]
+        });
         res.status(200).send(result)
     }
     catch (err) {
