@@ -14,6 +14,7 @@ const Turn = require('./db/models/Turn.js');
 
 
 
+
 //middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());//parser
@@ -80,7 +81,28 @@ app.get('/api/vehicles', (req, res) => {
 
 });
 
-app.delete('/api/clients-delete/:id', (req, res) => {
+app.delete('/api/clients-delete', async (req, res) => {
+    try {
+        const searchResult = await
+            Customer.findOne({
+                where: {
+                    id: req.query.id
+                }
+            });
+        if (searchResult) {
+            await Customer.destroy({ where: { id: req.query.id } });
+
+            res.sendStatus(202);
+
+        } else {
+            res.send('no existe Id')
+        }
+
+
+    } catch (err) {
+        if (err) res.send(err.message)
+        console.log('ERROR: ', err.message)
+    }
 
 });
 

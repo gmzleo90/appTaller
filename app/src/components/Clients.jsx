@@ -16,7 +16,7 @@ import {
 import { DeleteOutline } from "@mui/icons-material";
 import axios from "axios";
 import NewClientForm from "./NewClientForm";
-import NewVehicleForm from './NewVehicleForm';
+import NewVehicleForm from "./NewVehicleForm";
 
 // const Item = styled(Paper)(({ theme }) => ({
 //   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,6 +27,10 @@ import NewVehicleForm from './NewVehicleForm';
 // }));
 
 export default function Clients() {
+  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
+  const PARTICULAR_CLIENTS_ENDPOINT =
+    "http://localhost:3001/api/clients/checking-accounts";
+  
   //React States
   const [clients, setClients] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
@@ -35,6 +39,9 @@ export default function Clients() {
   const [type, setType] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
+  //selected rows state
+  const [selectedRows, setSelectedRows] = useState([]);
+  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRows[0]}`;
   //data-table data assign
   const columns = [
     {
@@ -84,7 +91,11 @@ export default function Clients() {
         return (
           <IconButton
             onClick={() => {
-              console.log("delete Pressed");
+              axios.delete(DELETE_CLIENTS_ENDPOINT).then((resp) => {
+                getClients();
+                console.log(resp);
+                console.log('selectedRows', selectedRows)
+              });
             }}
           >
             <DeleteOutline />
@@ -97,18 +108,15 @@ export default function Clients() {
 
   //Aux functions
   function getClients(e) {
-    let generalCLients = "http://localhost:3001/api/clients/general";
-    let particularClients =
-      "http://localhost:3001/api/clients/checking-accounts";
     if (e && e.target.innerText === "Cuenta Corriente") {
       setTableTitle("Clientes con Cuenta Corriente");
-      axios.get(particularClients).then((response) => {
+      axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
         setClients(response.data);
       });
     } else {
       setTableTitle("Clientes Particulares");
       axios
-        .get(generalCLients)
+        .get(GENERAL_CLIENTS_ENDPOINT)
         .then((response) => {
           setClients(response.data);
         })
@@ -192,9 +200,8 @@ export default function Clients() {
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              checkboxSelection
-              disableSelectionOnClick
               experimentalFeatures={{ newEditingApi: true }}
+              onSelectionModelChange={(rowsId) => setSelectedRows(rowsId)}
             />
           </Box>
         </Grid>
