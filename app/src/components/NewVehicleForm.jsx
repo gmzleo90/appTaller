@@ -16,17 +16,17 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function NewClientForm({ props }) {
+export default function NewVehicleForm({ props }) {
   const {
     toastAlert,
-    openClientForm,
-    setOpenClientForm,
-    setType,
+    openVehicleForm,
+    setOpenVehicleForm,
     setAlertMsg,
+    getVehicles,
   } = { ...props };
 
   const handleClose = (e) => {
-    setOpenClientForm(false);
+    setOpenVehicleForm(false);
   };
 
   const [form, setForm] = useState({
@@ -47,7 +47,6 @@ export default function NewClientForm({ props }) {
   }, []);
 
   function OpenToast(msg, type) {
-    setType(type);
     setAlertMsg(msg);
     toastAlert();
   }
@@ -60,6 +59,7 @@ export default function NewClientForm({ props }) {
         console.log(resp.data);
         handleClose();
         OpenToast("Exito: Vehiculo creado!", "success");
+        getVehicles();
         setForm({
           domain: "",
           BrandId: "",
@@ -68,17 +68,17 @@ export default function NewClientForm({ props }) {
         });
       })
       .catch((err) => {
-        console.error("ERROR--->", err)
-      OpenToast(
-        "No se puede Guardar: Error de proceso o Datos Ingresados!",
-        err.message
-      )})
-    }
-  
+        console.error("ERROR--->", err);
+        OpenToast(
+          "No se puede Guardar: Error de proceso o Datos Ingresados!",
+          err.message
+        );
+      });
+  }
 
   return (
     <>
-      <Dialog open={openClientForm} onClose={handleClose}>
+      <Dialog open={openVehicleForm} onClose={handleClose}>
         <DialogTitle>Ingresar Nuevo Cliente</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -94,9 +94,8 @@ export default function NewClientForm({ props }) {
               label="Marca"
               onChange={(e) => {
                 form.BrandId = e.target.value;
-                setForm({...form})
-                }
-              }
+                setForm({ ...form });
+              }}
             >
               {brands.map((brand) => (
                 <MenuItem key={brand.id} value={brand.id}>
@@ -116,10 +115,9 @@ export default function NewClientForm({ props }) {
               fullWidth
               variant="outlined"
               onChange={(e) => {
-                  form.domain = e.target.value;
-                  setForm({...form});
-                }
-              }
+                form.domain = e.target.value;
+                setForm({ ...form });
+              }}
               required
             />
 
@@ -131,7 +129,7 @@ export default function NewClientForm({ props }) {
               variant="outlined"
               onChange={(e) => {
                 form.model = e.target.value;
-                setForm({...form});
+                setForm({ ...form });
               }}
               required
             />
@@ -143,10 +141,9 @@ export default function NewClientForm({ props }) {
               fullWidth
               variant="outlined"
               onChange={(e) => {
-                 form.year = e.target.value
-                 setForm({...form});
-                }
-              }
+                form.year = e.target.value;
+                setForm({ ...form });
+              }}
               required
             />
           </FormControl>

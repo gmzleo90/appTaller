@@ -27,63 +27,47 @@ import NewVehicleForm from "./NewVehicleForm";
 // }));
 
 export default function Clients() {
-  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
-  const PARTICULAR_CLIENTS_ENDPOINT =
-    "http://localhost:3001/api/clients/checking-accounts";
+  const VEHICLES_ENDPOINT = "http://localhost:3001/api/vehicles";
 
   //React States
-  const [clients, setClients] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
-  const [openClientForm, setOpenClientForm] = useState(false);
-  //const [customerTypeValue, setCustomerTypeValue] = useState(false);
+  const [openVehicleForm, setOpenVehicleForm] = useState(false);
   const [type, setType] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
   //selected rows state
   const [selectedRow, setSelectedRow] = useState([]);
-  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(
+  const DELETE_VEHICLES_ENDPOINT = `http://localhost:3001/api/vehicles-delete?id=${selectedRow.at(
     0
   )}`;
   //data-table data assign
   const columns = [
     {
-      field: "fullName",
-      headerName: "Nombre",
-      description: "This column has a value getter and is not sortable.",
+      field: "domain",
+      headerName: "Dominio",
       sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+      width: 120,
     },
     {
-      field: "address",
-      headerName: "Dirección",
+      field: "model",
+      headerName: "Modelo",
       width: 120,
       editable: true,
     },
     {
-      field: "phone",
-      headerName: "Teléfono",
+      field: "year",
+      headerName: "Año",
       width: 120,
       editable: true,
     },
     {
-      field: "dni",
-      headerName: "D.N.I",
+      field: "createdAt",
+      headerName: "Fecha Registro",
       width: 120,
       editable: true,
     },
-    {
-      field: "cuit",
-      headerName: "CUIT",
-      width: 120,
-      editable: true,
-    },
-    {
-      field: "lastUpdate",
-      headerName: "Ultima Actualización",
-      width: 150,
-    },
+
     {
       field: "delete",
       width: 75,
@@ -93,8 +77,8 @@ export default function Clients() {
         return (
           <IconButton
             onClick={() => {
-              axios.delete(DELETE_CLIENTS_ENDPOINT).then((resp) => {
-                getClients();
+              axios.delete(DELETE_VEHICLES_ENDPOINT).then((resp) => {
+                getVehicles();
                 console.log(resp);
                 console.log("selectedRows", selectedRow);
               });
@@ -106,32 +90,22 @@ export default function Clients() {
       },
     },
   ];
-  const rows = clients;
+  const rows = vehicles;
 
   //Aux functions
-  function getClients(e) {
-    if (e && e.target.innerText === "Cuenta Corriente") {
-      setTableTitle("Clientes con Cuenta Corriente");
-      axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
-        setClients(response.data);
-      });
-    } else {
-      setTableTitle("Clientes Particulares");
-      axios
-        .get(GENERAL_CLIENTS_ENDPOINT)
-        .then((response) => {
-          setClients(response.data);
-        })
-        .catch((err) => console.log(err));
-    }
+  function getVehicles(e) {
+    setTableTitle("Vehículos registrados");
+    axios.get(VEHICLES_ENDPOINT).then((response) => {
+      setVehicles(response.data);
+    });
   }
 
-  function handleNewClient() {
-    setOpenClientForm(true);
+  function handleNewVehicle() {
+    setOpenVehicleForm(true);
   }
 
   useEffect(() => {
-    getClients();
+    getVehicles();
   }, []);
 
   function toastAlert() {
@@ -171,21 +145,8 @@ export default function Clients() {
             <nav aria-label="main">
               <List>
                 <ListItem>
-                  <ListItemButton onClick={handleNewClient}>
-                    <ListItemText primary="Nuevo Cliente" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText primary="Particulares" onClick={getClients} />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText
-                      primary="Cuenta Corriente"
-                      onClick={getClients}
-                    />
+                  <ListItemButton onClick={handleNewVehicle}>
+                    <ListItemText primary="Ingresar Vehículo" />
                   </ListItemButton>
                 </ListItem>
               </List>
@@ -207,12 +168,12 @@ export default function Clients() {
             />
           </Box>
         </Grid>
-        <NewClientForm
+        <NewVehicleForm
           props={{
-            openClientForm,
+            openVehicleForm,
             toastAlert,
-            getClients,
-            setOpenClientForm,
+            getVehicles,
+            setOpenVehicleForm,
             setType,
             setAlertMsg,
           }}

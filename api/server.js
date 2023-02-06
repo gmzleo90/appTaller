@@ -81,6 +81,32 @@ app.get('/api/vehicles', (req, res) => {
 
 });
 
+app.delete('/api/vehicles-delete', async (req, res) => {
+    try {
+        const searchResult = await
+            Vehicle.findOne({
+                where: {
+                    id: req.query.id
+                }
+            });
+        if (searchResult) {
+            await Vehicle.destroy({ where: { id: req.query.id } });
+
+            res.sendStatus(202);
+
+        } else {
+            res.send('no existe Id')
+        }
+
+
+    } catch (err) {
+        if (err) res.send(err.message)
+        console.log('ERROR: ', err.message)
+    }
+
+});
+
+
 app.delete('/api/clients-delete', async (req, res) => {
     try {
         const searchResult = await
