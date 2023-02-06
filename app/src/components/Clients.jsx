@@ -47,6 +47,11 @@ export default function Clients() {
   //data-table data assign
   const columns = [
     {
+      field: "id",
+      headerName: "Id",
+      width: 120,
+    },
+    {
       field: "fullName",
       headerName: "Nombre",
       description: "This column has a value getter and is not sortable.",
@@ -55,35 +60,35 @@ export default function Clients() {
       valueGetter: (params) =>
         `${params.row.firstName || ""} ${params.row.lastName || ""}`,
     },
-    {
-      field: "address",
-      headerName: "Dirección",
-      width: 120,
-      editable: true,
-    },
+   
     {
       field: "phone",
       headerName: "Teléfono",
       width: 120,
-      editable: true,
     },
+   
     {
-      field: "dni",
-      headerName: "D.N.I",
+      field: "address",
+      headerName: "Dirección",
       width: 120,
-      editable: true,
     },
     {
       field: "cuit",
       headerName: "CUIT",
       width: 120,
-      editable: true,
     },
+    {
+      field: "dni",
+      headerName: "D.N.I",
+      width: 120,
+    },
+   
     {
       field: "lastUpdate",
       headerName: "Ultima Actualización",
       width: 150,
     },
+  
     {
       field: "delete",
       width: 75,

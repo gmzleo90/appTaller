@@ -53,19 +53,21 @@ export default function Clients() {
       field: "model",
       headerName: "Modelo",
       width: 120,
-      editable: true,
     },
     {
       field: "year",
       headerName: "Año",
       width: 120,
-      editable: true,
     },
     {
       field: "createdAt",
       headerName: "Fecha Registro",
       width: 120,
-      editable: true,
+    },
+    {
+      field: "BrandId",
+      headerName: "Marca",
+      width: 120,
     },
 
     {
