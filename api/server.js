@@ -24,7 +24,7 @@ app.use(cors({         //cors
 }))
 
 
-//get all clients
+//get all general clients
 app.get('/api/clients/general', (req, res) => {
     Customer.findAll({ where: { customerType: false } }).then(result => {
         res.status(201).send(result);
@@ -36,6 +36,11 @@ app.get('/api/clients/general', (req, res) => {
 //get  checking accounts clients
 app.get('/api/clients/checking-accounts', (req, res) => {
     Customer.findAll({ where: { customerType: true } }).then(result => res.send(result).status(200)).catch();
+})
+
+//get all clients
+app.get('/api/clients/all-customers', (req, res) => {
+    Customer.findAll().then(result => res.send(result).status(200)).catch();
 })
 
 
@@ -73,7 +78,7 @@ app.post('/api/vehicles-create', (req, res) => {
 app.get('/api/vehicles', (req, res) => {
 
 
-    Vehicle.findAll()
+    Vehicle.findAll({include:[{model: Customer},{model: Brand}]})
         .then(result => {
             res.status(200).send(result);
         })
@@ -181,13 +186,12 @@ app.delete('/api/vehicles/brands-delete', async (req, res) => {
 //get client whit vehicles
 app.get('/api/clients-and-vehicles', async (req, res) => {
     try {
-        const result = await Customer.findOne({
+        const result = await Vehicle.findOne({
             where: {
                 id: req.query.id
             },
             include: [{
-                model: Vehicle,
-                include: [Brand]
+                model: Customer,
             }]
         });
         res.status(200).send(result)

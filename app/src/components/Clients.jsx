@@ -1,6 +1,6 @@
+//imports
 import { React, useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-
 import {
   Alert,
   Box,
@@ -16,39 +16,28 @@ import {
 import { DeleteOutline } from "@mui/icons-material";
 import axios from "axios";
 import NewClientForm from "./NewClientForm";
-import NewVehicleForm from "./NewVehicleForm";
-
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: "center",
-//   color: theme.palette.text.secondary,
-// }));
 
 export default function Clients() {
-  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
-  const PARTICULAR_CLIENTS_ENDPOINT =
-    "http://localhost:3001/api/clients/checking-accounts";
-
+    
   //React States
-  const [clients, setClients] = useState([]);
-  const [openAlert, setOpenAlert] = useState(false);
-  const [openClientForm, setOpenClientForm] = useState(false);
-  //const [customerTypeValue, setCustomerTypeValue] = useState(false);
   const [type, setType] = useState("");
+  const [clients, setClients] = useState([]);
   const [alertMsg, setAlertMsg] = useState("");
-  const [tableTitle, setTableTitle] = useState("Clientes Particulares");
-  //selected rows state
+  const [openAlert, setOpenAlert] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
-  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(
-    0
-  )}`;
-  //data-table data assign
+  const [openClientForm, setOpenClientForm] = useState(false);
+  const [tableTitle, setTableTitle] = useState("Clientes Particulares");
+  
+  //Constant ENDPOINTS
+  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
+  const PARTICULAR_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/checking-accounts";
+  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(0)}`;
+  
+  //data-table columns setup
   const columns = [
     {
       field: "id",
-      headerName: "Id",
+      headerName: "Nro. Cliente",
       width: 120,
     },
     {
@@ -60,13 +49,11 @@ export default function Clients() {
       valueGetter: (params) =>
         `${params.row.firstName || ""} ${params.row.lastName || ""}`,
     },
-   
     {
       field: "phone",
       headerName: "Teléfono",
       width: 120,
     },
-   
     {
       field: "address",
       headerName: "Dirección",
@@ -82,16 +69,16 @@ export default function Clients() {
       headerName: "D.N.I",
       width: 120,
     },
-   
-    {
-      field: "lastUpdate",
-      headerName: "Ultima Actualización",
-      width: 150,
-    },
-  
+
+    // {
+    //   field: "lastUpdate",
+    //   headerName: "Ultima Actualización",
+    //   width: 150,
+    // },
+
     {
       field: "delete",
-      width: 75,
+      width: 130,
       sortable: false,
       disableColumnMenu: true,
       renderHeader: () => {
@@ -106,6 +93,7 @@ export default function Clients() {
             }}
           >
             <DeleteOutline />
+            <span>Borrar</span>
           </IconButton>
         );
       },
@@ -147,7 +135,6 @@ export default function Clients() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpenAlert(false);
   };
 
@@ -182,14 +169,33 @@ export default function Clients() {
                 </ListItem>
                 <ListItem>
                   <ListItemButton>
-                    <ListItemText primary="Particulares" onClick={getClients} />
+                    <ListItemText
+                      primary="Particulares"
+                      onClick={(e) =>
+                        getClients(
+                          e,
+                          setTableTitle,
+                          setClients,
+                          PARTICULAR_CLIENTS_ENDPOINT,
+                          GENERAL_CLIENTS_ENDPOINT
+                        )
+                      }
+                    />
                   </ListItemButton>
                 </ListItem>
                 <ListItem>
                   <ListItemButton>
                     <ListItemText
                       primary="Cuenta Corriente"
-                      onClick={getClients}
+                      onClick={(e) =>
+                        getClients(
+                          e,
+                          setTableTitle,
+                          setClients,
+                          PARTICULAR_CLIENTS_ENDPOINT,
+                          GENERAL_CLIENTS_ENDPOINT
+                        )
+                      }
                     />
                   </ListItemButton>
                 </ListItem>

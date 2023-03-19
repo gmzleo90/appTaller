@@ -16,6 +16,7 @@ import { useState } from "react";
 
 export default function NewClientForm({ props }) {
   const {
+    pathName,
     toastAlert,
     openClientForm,
     setOpenClientForm,

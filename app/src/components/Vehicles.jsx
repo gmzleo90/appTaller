@@ -28,14 +28,17 @@ import NewVehicleForm from "./NewVehicleForm";
 
 export default function Clients() {
   const VEHICLES_ENDPOINT = "http://localhost:3001/api/vehicles";
+  //const GET_ALL_CUSTOMERS_ENDPOINT = "http://localhost:3001/api/all-customers";
 
   //React States
   const [vehicles, setVehicles] = useState([]);
+ // const [rows, setRows] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
   const [type, setType] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
+  const [openClientForm, setOpenClientForm] = useState(false);
   //selected rows state
   const [selectedRow, setSelectedRow] = useState([]);
   const DELETE_VEHICLES_ENDPOINT = `http://localhost:3001/api/vehicles-delete?id=${selectedRow.at(
@@ -47,6 +50,16 @@ export default function Clients() {
       field: "domain",
       headerName: "Dominio",
       sortable: false,
+      width: 120,
+    },
+    {
+      field: "customer",
+      headerName: "Propietario",
+      width: 160,
+    },
+    {
+      field: "brand",
+      headerName: "Marca",
       width: 120,
     },
     {
@@ -64,11 +77,6 @@ export default function Clients() {
       headerName: "Fecha Registro",
       width: 120,
     },
-    {
-      field: "BrandId",
-      headerName: "Marca",
-      width: 120,
-    },
 
     {
       field: "delete",
@@ -81,8 +89,6 @@ export default function Clients() {
             onClick={() => {
               axios.delete(DELETE_VEHICLES_ENDPOINT).then((resp) => {
                 getVehicles();
-                console.log(resp);
-                console.log("selectedRows", selectedRow);
               });
             }}
           >
@@ -92,23 +98,41 @@ export default function Clients() {
       },
     },
   ];
-  const rows = vehicles;
-
   //Aux functions
-  function getVehicles(e) {
+  function getVehicles() {
     setTableTitle("Vehículos registrados");
     axios.get(VEHICLES_ENDPOINT).then((response) => {
       setVehicles(response.data);
     });
-  }
+    
+  } 
+
+ const rows = vehicles.map( (resp) => {
+     return {
+      id: resp.id,
+      domain: resp.domain,
+      model: resp.model,
+      year: resp.year,
+      customer:  resp.Customer ? `${resp.Customer.firstName} ${resp.Customer.lastName} ` : "No propietario",
+      brand: resp.Brand.brandName,
+      createdAt: resp.createdAt,
+     }})
+
+  
 
   function handleNewVehicle() {
+    getVehicles()
     setOpenVehicleForm(true);
+  }
+
+  function handleNeClient() {
+    setOpenVehicleForm(false);
+    setOpenClientForm(true);
   }
 
   useEffect(() => {
     getVehicles();
-  }, []);
+  }, [openVehicleForm]);
 
   function toastAlert() {
     setOpenAlert(true);
@@ -151,6 +175,11 @@ export default function Clients() {
                     <ListItemText primary="Ingresar Vehículo" />
                   </ListItemButton>
                 </ListItem>
+                <ListItem>
+                  <ListItemButton onClick={handleNeClient}>
+                    <ListItemText primary="Ingresar Propietario" />
+                  </ListItemButton>
+                </ListItem>
               </List>
             </nav>
           </Box>
@@ -166,16 +195,28 @@ export default function Clients() {
               pageSize={10}
               rowsPerPageOptions={[10]}
               experimentalFeatures={{ newEditingApi: true }}
-              onSelectionModelChange={(rowsId) => setSelectedRow(rowsId)}
+              onSelectionModelChange={(rowsId) => setSelectedRow(rowsId)
+            }
             />
           </Box>
         </Grid>
         <NewVehicleForm
           props={{
+            openClientForm,
             openVehicleForm,
             toastAlert,
             getVehicles,
             setOpenVehicleForm,
+            setOpenClientForm,
+            setType,
+            setAlertMsg,
+          }}
+        />
+        <NewClientForm
+          props={{
+            openClientForm,
+            toastAlert,
+            setOpenClientForm,
             setType,
             setAlertMsg,
           }}
