@@ -14,6 +14,7 @@ const Turn = require('./db/models/Turn.js');
 
 
 
+
 //middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());//parser
@@ -23,7 +24,7 @@ app.use(cors({         //cors
 }))
 
 
-//get all clients
+//get all general clients
 app.get('/api/clients/general', (req, res) => {
     Customer.findAll({ where: { customerType: false } }).then(result => {
         res.status(201).send(result);
@@ -35,6 +36,11 @@ app.get('/api/clients/general', (req, res) => {
 //get  checking accounts clients
 app.get('/api/clients/checking-accounts', (req, res) => {
     Customer.findAll({ where: { customerType: true } }).then(result => res.send(result).status(200)).catch();
+})
+
+//get all clients
+app.get('/api/clients/all-customers', (req, res) => {
+    Customer.findAll().then(result => res.send(result).status(200)).catch();
 })
 
 
@@ -49,7 +55,7 @@ app.post('/api/clients-create', (req, res) => {
                 })
         })
         .catch((err) => {
-            //res.sendStatus(409)   
+            res.status(409).send(err.message);
             console.log(err);
         })
 })
@@ -72,7 +78,7 @@ app.post('/api/vehicles-create', (req, res) => {
 app.get('/api/vehicles', (req, res) => {
 
 
-    Vehicle.findAll()
+    Vehicle.findAll({include:[{model: Customer},{model: Brand}]})
         .then(result => {
             res.status(200).send(result);
         })
@@ -80,7 +86,54 @@ app.get('/api/vehicles', (req, res) => {
 
 });
 
-app.delete('/api/clients-delete/:id', (req, res) => {
+app.delete('/api/vehicles-delete', async (req, res) => {
+    try {
+        const searchResult = await
+            Vehicle.findOne({
+                where: {
+                    id: req.query.id
+                }
+            });
+        if (searchResult) {
+            await Vehicle.destroy({ where: { id: req.query.id } });
+
+            res.sendStatus(202);
+
+        } else {
+            res.send('no existe Id')
+        }
+
+
+    } catch (err) {
+        if (err) res.send(err.message)
+        console.log('ERROR: ', err.message)
+    }
+
+});
+
+
+app.delete('/api/clients-delete', async (req, res) => {
+    try {
+        const searchResult = await
+            Customer.findOne({
+                where: {
+                    id: req.query.id
+                }
+            });
+        if (searchResult) {
+            await Customer.destroy({ where: { id: req.query.id } });
+
+            res.sendStatus(202);
+
+        } else {
+            res.send('no existe Id')
+        }
+
+
+    } catch (err) {
+        if (err) res.send(err.message)
+        console.log('ERROR: ', err.message)
+    }
 
 });
 
@@ -133,15 +186,14 @@ app.delete('/api/vehicles/brands-delete', async (req, res) => {
 //get client whit vehicles
 app.get('/api/clients-and-vehicles', async (req, res) => {
     try {
-        const result = await Customer.findOne({ 
-            where: { 
-                id: req.query.id 
-            }, 
-            include: [{ 
-                model: Vehicle, 
-                include: [Brand] 
-            }] 
-        });      
+        const result = await Vehicle.findOne({
+            where: {
+                id: req.query.id
+            },
+            include: [{
+                model: Customer,
+            }]
+        });
         res.status(200).send(result)
     }
     catch (err) {

@@ -1,6 +1,6 @@
+//imports
 import { React, useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-
 import {
   Alert,
   Box,
@@ -16,27 +16,30 @@ import {
 import { DeleteOutline } from "@mui/icons-material";
 import axios from "axios";
 import NewClientForm from "./NewClientForm";
-import NewVehicleForm from './NewVehicleForm';
-
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: "center",
-//   color: theme.palette.text.secondary,
-// }));
 
 export default function Clients() {
+    
   //React States
-  const [clients, setClients] = useState([]);
-  const [openAlert, setOpenAlert] = useState(false);
-  const [openClientForm, setOpenClientForm] = useState(false);
-  //const [customerTypeValue, setCustomerTypeValue] = useState(false);
   const [type, setType] = useState("");
+  const [clients, setClients] = useState([]);
   const [alertMsg, setAlertMsg] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [selectedRow, setSelectedRow] = useState([]);
+  const [openClientForm, setOpenClientForm] = useState(false);
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
-  //data-table data assign
+  
+  //Constant ENDPOINTS
+  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
+  const PARTICULAR_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/checking-accounts";
+  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(0)}`;
+  
+  //data-table columns setup
   const columns = [
+    {
+      field: "id",
+      headerName: "Nro. Cliente",
+      width: 120,
+    },
     {
       field: "fullName",
       headerName: "Nombre",
@@ -47,47 +50,50 @@ export default function Clients() {
         `${params.row.firstName || ""} ${params.row.lastName || ""}`,
     },
     {
-      field: "address",
-      headerName: "Dirección",
-      width: 120,
-      editable: true,
-    },
-    {
       field: "phone",
       headerName: "Teléfono",
       width: 120,
-      editable: true,
     },
     {
-      field: "dni",
-      headerName: "D.N.I",
+      field: "address",
+      headerName: "Dirección",
       width: 120,
-      editable: true,
     },
     {
       field: "cuit",
       headerName: "CUIT",
       width: 120,
-      editable: true,
     },
     {
-      field: "lastUpdate",
-      headerName: "Ultima Actualización",
-      width: 150,
+      field: "dni",
+      headerName: "D.N.I",
+      width: 120,
     },
+
+    // {
+    //   field: "lastUpdate",
+    //   headerName: "Ultima Actualización",
+    //   width: 150,
+    // },
+
     {
       field: "delete",
-      width: 75,
+      width: 130,
       sortable: false,
       disableColumnMenu: true,
       renderHeader: () => {
         return (
           <IconButton
             onClick={() => {
-              console.log("delete Pressed");
+              axios.delete(DELETE_CLIENTS_ENDPOINT).then((resp) => {
+                getClients();
+                console.log(resp);
+                console.log("selectedRows", selectedRow);
+              });
             }}
           >
             <DeleteOutline />
+            <span>Borrar</span>
           </IconButton>
         );
       },
@@ -97,18 +103,15 @@ export default function Clients() {
 
   //Aux functions
   function getClients(e) {
-    let generalCLients = "http://localhost:3001/api/clients/general";
-    let particularClients =
-      "http://localhost:3001/api/clients/checking-accounts";
     if (e && e.target.innerText === "Cuenta Corriente") {
       setTableTitle("Clientes con Cuenta Corriente");
-      axios.get(particularClients).then((response) => {
+      axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
         setClients(response.data);
       });
     } else {
       setTableTitle("Clientes Particulares");
       axios
-        .get(generalCLients)
+        .get(GENERAL_CLIENTS_ENDPOINT)
         .then((response) => {
           setClients(response.data);
         })
@@ -132,7 +135,6 @@ export default function Clients() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpenAlert(false);
   };
 
@@ -167,14 +169,33 @@ export default function Clients() {
                 </ListItem>
                 <ListItem>
                   <ListItemButton>
-                    <ListItemText primary="Particulares" onClick={getClients} />
+                    <ListItemText
+                      primary="Particulares"
+                      onClick={(e) =>
+                        getClients(
+                          e,
+                          setTableTitle,
+                          setClients,
+                          PARTICULAR_CLIENTS_ENDPOINT,
+                          GENERAL_CLIENTS_ENDPOINT
+                        )
+                      }
+                    />
                   </ListItemButton>
                 </ListItem>
                 <ListItem>
                   <ListItemButton>
                     <ListItemText
                       primary="Cuenta Corriente"
-                      onClick={getClients}
+                      onClick={(e) =>
+                        getClients(
+                          e,
+                          setTableTitle,
+                          setClients,
+                          PARTICULAR_CLIENTS_ENDPOINT,
+                          GENERAL_CLIENTS_ENDPOINT
+                        )
+                      }
                     />
                   </ListItemButton>
                 </ListItem>
@@ -192,9 +213,8 @@ export default function Clients() {
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              checkboxSelection
-              disableSelectionOnClick
               experimentalFeatures={{ newEditingApi: true }}
+              onSelectionModelChange={(rowsId) => setSelectedRow(rowsId)}
             />
           </Box>
         </Grid>

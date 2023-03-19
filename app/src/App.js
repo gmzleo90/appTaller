@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 //import SignIn from './components/SingIn';
 import AppBar from "./components/AppBar";
 import Clients from "./components/Clients";
+import Vehicles from "./components/Vehicles";
 
 const theme = createTheme();
 //let isLoggedIn = true
@@ -14,6 +15,7 @@ function App() {
       <AppBar />
       <Routes>
         <Route path="clientes" element={<Clients />} />
+        <Route path="vehiculos" element={<Vehicles />} />
       </Routes>
     </ThemeProvider>
   );

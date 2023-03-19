@@ -16,6 +16,7 @@ import { useState } from "react";
 
 export default function NewClientForm({ props }) {
   const {
+    pathName,
     toastAlert,
     openClientForm,
     setOpenClientForm,
@@ -25,13 +26,13 @@ export default function NewClientForm({ props }) {
   } = { ...props };
 
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    dni: "",
-    cuit: "",
-    address: "",
-    location: "",
-    phone: "",
+    firstName: null,
+    lastName: null,
+    dni: null,
+    cuit: null,
+    address: null,
+    location: null,
+    phone: null,
     customerType: false,
   });
   const handleClose = (e) => {
@@ -55,20 +56,20 @@ export default function NewClientForm({ props }) {
         getClients();
         OpenToast("Exito: Cliente Guardado!", "success");
         setForm({
-          firstName: "",
-          lastName: "",
-          dni: "",
-          cuit: "",
-          address: "",
-          location: "",
-          phone: "",
+          firstName: null,
+          lastName: null,
+          dni: null,
+          cuit: null,
+          address: null,
+          location: null,
+          phone: null,
           customerType: false,
         });
       })
       .catch((err) => {
         console.error("ERROR--->", err);
         OpenToast(
-          "No se puede Guardar: Error de proceso o Datos Ingresados!",
+          "No se puede Guardar: Verifique los datos ingresados!",
           "error"
         );
       });
@@ -91,7 +92,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.firstName = e.target.value)}
+              onChange={(e) =>
+                (form.firstName = e.target.value ? e.target.value : null)
+              }
               required
             />
             <TextField
@@ -101,7 +104,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.lastName = e.target.value)}
+              onChange={(e) =>
+                (form.lastName = e.target.value ? e.target.value : null)
+              }
               required
             />
             <TextField
@@ -111,7 +116,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.dni = e.target.value)}
+              onChange={(e) =>
+                (form.dni = e.target.value ? e.target.value : null)
+              }
               required
             />
             <TextField
@@ -121,7 +128,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.phone = e.target.value)}
+              onChange={(e) =>
+                (form.phone = e.target.value ? e.target.value : null)
+              }
               required
             />
             <TextField
@@ -131,7 +140,9 @@ export default function NewClientForm({ props }) {
               type="number"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.cuit = e.target.value)}
+              onChange={(e) =>
+                (form.cuit = e.target.value ? e.target.value : null)
+              }
             />
             <TextField
               margin="dense"
@@ -140,7 +151,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.address = e.target.value)}
+              onChange={(e) =>
+                (form.address = e.target.value ? e.target.value : null)
+              }
               required
             />
             <TextField
@@ -150,7 +163,9 @@ export default function NewClientForm({ props }) {
               type="text"
               fullWidth
               variant="outlined"
-              onChange={(e) => (form.location = e.target.value)}
+              onChange={(e) =>
+                (form.location = e.target.value ? e.target.value : null)
+              }
               required
             />
             <FormControlLabel
