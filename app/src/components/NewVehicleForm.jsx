@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -15,17 +14,17 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 //Styles for customers dropdown list
-const useStyles = makeStyles({
+/* const useStyles = makeStyles({
   paper: {
     overflowY: "scroll",
     height: "200px",
   },
-});
+}); */
 
 export default function NewVehicleForm({ props }) {
-  const classes = useStyles();
+  //const classes = useStyles();
   const {
          setType,
          toastAlert,
@@ -135,11 +134,11 @@ export default function NewVehicleForm({ props }) {
           <br />
           <InputLabel id="customer">Propietario</InputLabel>
           <Select
-            MenuProps={{
+           /*  MenuProps={{
               classes: {
                 paper: classes.paper,
               },
-            }}
+            }} */
             fullWidth
             labelId="customer"
             id="customer-select"
