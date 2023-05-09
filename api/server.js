@@ -20,7 +20,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());//parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({         //cors 
-    origin: 'http://localhost:3000'
+    origin: 'https://app-taller.vercel.app'
 }))
 
 
