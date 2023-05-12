@@ -210,7 +210,7 @@ app.get('/api/clients-and-vehicles', async (req, res) => {
 
 
 //server port
-const PORT = 3001;
+const PORT = 8080|| process.env.PORT ;
 
 db.sync(
     //{ force: true }
