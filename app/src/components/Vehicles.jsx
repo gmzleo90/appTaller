@@ -27,8 +27,8 @@ import NewVehicleForm from "./NewVehicleForm";
 // }));
 
 export default function Clients() {
-  const VEHICLES_ENDPOINT = "http://localhost:3001/api/vehicles";
-  //const GET_ALL_CUSTOMERS_ENDPOINT = "http://localhost:3001/api/all-customers";
+  const VEHICLES_ENDPOINT = "https://app-taller-api.vercel.app/api/vehicles";
+  //const GET_ALL_CUSTOMERS_ENDPOINT = "https://app-taller-api.vercel.app/api/all-customers";
 
   //React States
   const [vehicles, setVehicles] = useState([]);
@@ -41,7 +41,7 @@ export default function Clients() {
   const [openClientForm, setOpenClientForm] = useState(false);
   //selected rows state
   const [selectedRow, setSelectedRow] = useState([]);
-  const DELETE_VEHICLES_ENDPOINT = `http://localhost:3001/api/vehicles-delete?id=${selectedRow.at(
+  const DELETE_VEHICLES_ENDPOINT = `https://app-taller-api.vercel.app/api/vehicles-delete?id=${selectedRow.at(
     0
   )}`;
   //data-table data assign

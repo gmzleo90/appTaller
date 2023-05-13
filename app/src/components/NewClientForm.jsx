@@ -49,7 +49,7 @@ export default function NewClientForm({ props }) {
     console.log(form);
     setForm({ ...form });
     axios
-      .post("http://localhost:3001/api/clients-create", { ...form })
+      .post("https://app-taller-api.vercel.app/api/clients-create", { ...form })
       .then((resp) => {
         console.log(resp.data);
         handleClose();

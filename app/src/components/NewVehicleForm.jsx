@@ -57,11 +57,11 @@ export default function NewVehicleForm({ props }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/vehicles/brands")
+      .get("https://app-taller-api.vercel.app/api/vehicles/brands")
       .then((brandResponse) => {
         setBrands(brandResponse.data);
         axios
-          .get("http://localhost:3001/api/clients/all-customers")
+          .get("https://app-taller-api.vercel.app/api/clients/all-customers")
           .then((customerResponse) => {
             setCustomers(customerResponse.data);
           });
@@ -77,7 +77,7 @@ export default function NewVehicleForm({ props }) {
   function handleSave() {
     setForm({ ...form });
     axios
-      .post("http://localhost:3001/api/vehicles-create", { ...form })
+      .post("https://app-taller-api.vercel.app/api/vehicles-create", { ...form })
       .then((resp) => {
         console.log(resp.data);
         handleClose();
