@@ -28,10 +28,10 @@ export default function Clients() {
   const [openClientForm, setOpenClientForm] = useState(false);
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
   
-  //Constant ENDPOINTS
-  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
-  const PARTICULAR_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/checking-accounts";
-  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(0)}`;
+ //Constant ENDPOINTS
+  const GENERAL_CLIENTS_ENDPOINT = "https://app-taller-api.vercel.app/api/clients/general";
+  const PARTICULAR_CLIENTS_ENDPOINT = "https://app-taller-api.vercel.app/api/clients/checking-accounts";
+  const DELETE_CLIENTS_ENDPOINT = `https://app-taller-api.vercel.app/api/clients-delete?id=${selectedRow.at(0)}`;
   
   //data-table columns setup
   const columns = [
@@ -107,6 +107,7 @@ export default function Clients() {
       setTableTitle("Clientes con Cuenta Corriente");
       axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
         setClients(response.data);
+        console.log('PARTICULAR_CLIENTS_ENDPOINT-->',response);
       });
     } else {
       setTableTitle("Clientes Particulares");
@@ -114,6 +115,7 @@ export default function Clients() {
         .get(GENERAL_CLIENTS_ENDPOINT)
         .then((response) => {
           setClients(response.data);
+          console.log('GENERAL_CLIENTS_ENDPOINT-->',response);
         })
         .catch((err) => console.log(err));
     }
