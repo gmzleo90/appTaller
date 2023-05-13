@@ -103,6 +103,7 @@ export default function Clients() {
 
   //Aux functions
   function getClients(e) {
+    console.log('PARTICULAR_CLIENTS_ENDPOINT-->');
     if (e && e.target.innerText === "Cuenta Corriente") {
       setTableTitle("Clientes con Cuenta Corriente");
       axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
