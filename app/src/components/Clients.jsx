@@ -107,6 +107,7 @@ export default function Clients() {
       setTableTitle("Clientes con Cuenta Corriente");
       axios.get(PARTICULAR_CLIENTS_ENDPOINT).then((response) => {
         setClients(response.data);
+        console.log('PARTICULAR_CLIENTS_ENDPOINT-->',response);
       });
     } else {
       setTableTitle("Clientes Particulares");
@@ -114,6 +115,7 @@ export default function Clients() {
         .get(GENERAL_CLIENTS_ENDPOINT)
         .then((response) => {
           setClients(response.data);
+          console.log('GENERAL_CLIENTS_ENDPOINT-->',response);
         })
         .catch((err) => console.log(err));
     }
