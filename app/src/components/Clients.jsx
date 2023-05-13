@@ -28,10 +28,10 @@ export default function Clients() {
   const [openClientForm, setOpenClientForm] = useState(false);
   const [tableTitle, setTableTitle] = useState("Clientes Particulares");
   
-  //Constant ENDPOINTS
-  const GENERAL_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/general";
-  const PARTICULAR_CLIENTS_ENDPOINT = "http://localhost:3001/api/clients/checking-accounts";
-  const DELETE_CLIENTS_ENDPOINT = `http://localhost:3001/api/clients-delete?id=${selectedRow.at(0)}`;
+ //Constant ENDPOINTS
+  const GENERAL_CLIENTS_ENDPOINT = "https://app-taller-api.vercel.app/api/clients/general";
+  const PARTICULAR_CLIENTS_ENDPOINT = "https://app-taller-api.vercel.app/api/clients/checking-accounts";
+  const DELETE_CLIENTS_ENDPOINT = `https://app-taller-api.vercel.app/api/clients-delete?id=${selectedRow.at(0)}`;
   
   //data-table columns setup
   const columns = [
