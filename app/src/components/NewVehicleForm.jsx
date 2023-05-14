@@ -134,7 +134,8 @@ export default function NewVehicleForm({ props }) {
           <br />
           <InputLabel id="customer">Propietario</InputLabel>
           <Select
-            MenuProps={{ disableScrollLock: true }}      
+            MenuProps={{ overflowY: "scroll",
+            height: "200px"}}      
             fullWidth
             labelId="customer"
             id="customer-select"
