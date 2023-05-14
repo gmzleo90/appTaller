@@ -14,14 +14,14 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 //Styles for customers dropdown list
-const useStyles = makeStyles({
+/* const useStyles = makeStyles({
   paper: {
     overflowY: "scroll",
     height: "200px",
   },
-}); 
+});  */
 
 export default function NewVehicleForm({ props }) {
   //const classes = useStyles();
@@ -134,11 +134,15 @@ export default function NewVehicleForm({ props }) {
           <br />
           <InputLabel id="customer">Propietario</InputLabel>
           <Select
-           /*  MenuProps={{
+            MenuProps={{
               classes: {
-                paper: classes.paper,
+                paper:  sx={
+                  overflowY: "scroll",
+                  height: "200px",
+                }
               },
-            }} */
+            }} 
+           
             fullWidth
             labelId="customer"
             id="customer-select"
