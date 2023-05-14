@@ -136,7 +136,7 @@ export default function NewVehicleForm({ props }) {
           <Select
             MenuProps={{
               classes: {
-                paper:  sx={
+                paper:  {
                   overflowY: "scroll",
                   height: "200px",
                 }
