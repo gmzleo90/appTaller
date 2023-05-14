@@ -14,7 +14,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@emotion/styled";
 //Styles for customers dropdown list
 const useStyles = makeStyles({
   paper: {
