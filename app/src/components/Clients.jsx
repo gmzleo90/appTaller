@@ -70,11 +70,7 @@ export default function Clients() {
       width: 120,
     },
 
-    // {
-    //   field: "lastUpdate",
-    //   headerName: "Ultima Actualización",
-    //   width: 150,
-    // },
+  
 
     {
       field: "delete",

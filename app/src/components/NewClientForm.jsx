@@ -46,14 +46,11 @@ export default function NewClientForm({ props }) {
   }
 
   function handleSave() {
-    console.log(form);
     setForm({ ...form });
     axios
       .post("https://app-taller-api.vercel.app/api/clients-create", { ...form })
       .then((resp) => {
-        console.log(resp.data);
         handleClose();
-        getClients();
         OpenToast("Exito: Cliente Guardado!", "success");
         setForm({
           firstName: null,
@@ -65,6 +62,7 @@ export default function NewClientForm({ props }) {
           phone: null,
           customerType: false,
         });
+        getClients();
       })
       .catch((err) => {
         console.error("ERROR--->", err);

@@ -7,7 +7,7 @@ import Clients from "./components/Clients";
 import Vehicles from "./components/Vehicles";
 
 const theme = createTheme();
-//let isLoggedIn = true
+
 
 function App() {
   return (
